@@ -20,7 +20,7 @@ class CheckIsAdmin
     public function handle(Request $request, Closure $next)
     {
         if(!Auth::user()->isAdmin()){
-            return redirect()->route('welcome');
+            return redirect()->route('index.bush');
         }
 
         return $next($request);

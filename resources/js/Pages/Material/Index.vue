@@ -184,7 +184,7 @@ const selectAll = computed({
             <ExportButton :export-route="'export.project'" :export-element="project"></ExportButton>
         </div>
         <!-- component -->
-        <div class="flex-grow overflow-auto">
+        <div class="flex-grow overflow-auto font-[Poppins]">
             <table class="relative w-full border mb-3 text-xs table-fixed">
                 <thead>
                 <tr>
