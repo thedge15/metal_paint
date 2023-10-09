@@ -66,7 +66,7 @@ const closeUpdate = () => {
                     <th class="sticky top-0 px-2 py-3 text-indigo-100 bg-indigo-500">Удаление</th>
                 </tr>
                 </thead>
-                <tbody class="divide-y bg-gray-100">
+                <tbody class="divide-y bg-gray-100 font-[Poppins]">
                 <tr v-for="(item, index) in characteristics">
                     <td :class='["px-2 py-2 text-left", index%2 === 0 ? "" : "bg-gray-300"]'>{{ index + 1 }}</td>
                     <td :class='["px-2 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
