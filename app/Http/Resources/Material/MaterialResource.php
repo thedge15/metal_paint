@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Material;
 
+use App\Http\Resources\Standard\StandardResource;
+use App\Http\Resources\Steel\SteelResource;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -12,7 +14,7 @@ class MaterialResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request): array
@@ -22,6 +24,8 @@ class MaterialResource extends JsonResource
             'element' => $this->element,
             'numb' => $this->numb,
             'title' => $this->title,
+            'standard' => StandardResource::make($this->standard)->resolve()['title'],
+            'steel' => SteelResource::make($this->steel)->resolve()['title'],
             'weight' => $this->weight,
             'length' => $this->length,
             'area' => $this->area,

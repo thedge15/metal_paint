@@ -3,7 +3,6 @@
 namespace App\Actions\Bush;
 
 use App\Actions\StoreUpdateAction;
-
 class BushStoreAction extends StoreUpdateAction
 {
     /**

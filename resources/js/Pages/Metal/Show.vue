@@ -49,7 +49,7 @@ const closeUpdate = () => {
 </script>
 <template>
     <UserLayout>
-        <Link :href="route('index.metal')" class="text-center italic">{{ metal.data.title }}</Link>
+        <Link :href="route('index.metal')" class="text-center italic">{{ metal.title }}</Link>
         <CreateButton @closeStore="closeStore" :disabled="hideMaterial"></CreateButton>
         <div class="flex-grow overflow-auto">
             <table v-if="characteristics" class="relative w-full border mb-3 table-fixed">
@@ -58,7 +58,7 @@ const closeUpdate = () => {
                     <th class="sticky top-0 px-2 py-3 text-indigo-100 text-left w-6 bg-indigo-500">№</th>
                     <th class="sticky top-0 px-2 py-3 text-indigo-100 bg-indigo-500">Наименование</th>
                     <th class="sticky top-0 px-2 py-3 text-indigo-100 bg-indigo-500">Размеры</th>
-                    <th v-if="metal.data.title !== 'Лист' && metal.data.title !== 'Лист просечно-вытяжной' && metal.data.title !== 'Лист рулонный'"
+                    <th v-if="metal.title !== 'Лист' && metal.title !== 'Лист просечно-вытяжной' && metal.title !== 'Лист рулонный' && metal.title !== 'Профлист'"
                         class="sticky top-0 px-2 py-3 text-indigo-100 bg-indigo-500">Длина тонны, м
                     </th>
                     <th class="sticky top-0 px-2 py-3 text-indigo-100 bg-indigo-500">Площадь тонны, м<sup>2</sup></th>
@@ -82,7 +82,7 @@ const closeUpdate = () => {
                             w-full block text-xs">
                         </div>
                     </td>
-                    <td v-if="metal.data.title !== 'Лист' && metal.data.title !== 'Лист просечно-вытяжной' && metal.data.title !== 'Лист рулонный'"
+                    <td v-if="metal.title !== 'Лист' && metal.title !== 'Лист просечно-вытяжной' && metal.title !== 'Лист рулонный' && metal.title !== 'Профлист'"
                         :class='["px-2 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <div v-if="hideUpdate || !hideUpdate && item.id !== updId">
                             {{ item.ton_length }}

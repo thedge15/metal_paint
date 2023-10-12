@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Bush\BushAllAction;
 use App\Actions\Bush\BushIndexAction;
 use App\Actions\Bush\BushShowAction;
 use App\Actions\Bush\BushStoreAction;
 use App\Exports\BushExport;
+use App\Http\Resources\Bush\BushResource;
 use App\Models\Bush;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -56,5 +58,9 @@ class BushController extends Controller
     public function export(Bush $bush): BinaryFileResponse
     {
         return Excel::download(new BushExport($bush), $bush->title . '.xlsx');
+    }
+    public function all(Bush $bush, BushAllAction $action): Response|ResponseFactory
+    {
+        return inertia('Bush/All', $action->handle($bush));
     }
 }

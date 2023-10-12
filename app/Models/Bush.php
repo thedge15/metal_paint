@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,10 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Bush extends Model
 {
-    use HasFactory;
-
-//    public mixed $projects;
-//    public mixed $title;
     protected $guarded = false;
     protected $table = 'bushes';
 

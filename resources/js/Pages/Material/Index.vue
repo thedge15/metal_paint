@@ -232,7 +232,7 @@ const selectAll = computed({
                     </td>
                     <td :class='["px-6 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <div v-if="hideUpdate || !hideUpdate && item.id !== updId">
-                            {{ item.title }}
+                            {{ item.title }} {{item.standard}} {{item.steel}}
                         </div>
                         <div v-if="!hideUpdate && item.id === updId">
                             <input v-model="form.title" id="updPosition" class="h-8 bg-gray-50 border border-gray-600

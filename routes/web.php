@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [BushController::class, 'index'])->name('index.bush');
         Route::post('/', [BushController::class, 'store'])->name('store.bush');
         Route::get('/{bush}', [BushController::class, 'show'])->name('show.bush');
+        Route::get('all/{bush}', [BushController::class, 'all'])->name('all.bush');
         Route::delete('/{bush}', [BushController::class, 'destroy'])->name('destroy.bush');
         Route::get('/export/{bush}', [BushController::class, 'export'])->name('export.bush');
     });

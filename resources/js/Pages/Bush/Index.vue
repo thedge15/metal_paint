@@ -5,7 +5,7 @@ import ShowButton from "@/Components/ShowButton.vue";
 import DeleteButton from "@/Components/DeleteButton.vue";
 import StoreComponent from "@/Components/StoreComponent.vue";
 import {ref} from "vue";
-import {Link, useForm} from "@inertiajs/vue3";
+import {Link, router, useForm} from "@inertiajs/vue3";
 
 const hideMaterial = ref(false)
 const hideUpdate = ref(true);
@@ -40,6 +40,7 @@ const form = useForm({
                     <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">№</th>
                     <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Наименование куста</th>
                     <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Просмотр</th>
+                    <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Весь куст</th>
                     <th v-if="$page.props.auth.user['is_admin'] === 1"
                         class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Удаление
                     </th>
@@ -53,6 +54,9 @@ const form = useForm({
                         <Link :href="route('show.bush', item.id)">
                             <ShowButton></ShowButton>
                         </Link>
+                    </td>
+                    <td :class='["px-6 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
+                        <a :href="route('all.bush', item.id)">Материалы</a>
                     </td>
                     <td v-if="$page.props.auth.user['is_admin'] === 1"
                         :class='["px-6 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>

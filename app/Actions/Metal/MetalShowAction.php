@@ -13,7 +13,7 @@ class MetalShowAction
     public function handle($metal): array
     {
         $characteristics = CharacteristicResource::collection($metal->characteristics->sortBy('title', SORT_NATURAL))->resolve();
-        $metal = new MetalResource($metal);
+        $metal = MetalResource::make($metal)->resolve();
 
         return compact(['characteristics', 'metal']);
     }
