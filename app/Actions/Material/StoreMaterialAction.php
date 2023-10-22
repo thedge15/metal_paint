@@ -5,11 +5,12 @@ namespace App\Actions\Material;
 use App\Actions\StoreUpdateAction;
 use App\Actions\TYPE_NAME;
 use App\Models\Characteristic;
-use App\Models\Metal;
 
+/**
+ *
+ */
 class StoreMaterialAction extends StoreUpdateAction
 {
-
     /**
      * @return array
      */
@@ -22,39 +23,31 @@ class StoreMaterialAction extends StoreUpdateAction
         $data = $this->getRequest()->validate([
             'project_id' => 'required|integer',
             'numb' => 'nullable|integer',
-            'element' => 'nullable|string',
-            'metal' => 'required|string',
-            'title' => 'required|string',
+            'element_id' => 'nullable|integer',
+            'metal_id' => 'required|integer',
+            'characteristic_id' => 'required|integer',
             'metalLength' => 'nullable|numeric',
             'sheetHeight' => 'nullable|integer',
             'sheetWidth' => 'nullable|integer',
-            'standard' => 'required|string',
-            'steel' => 'required|string',
+            'standard_id' => 'required|integer',
+            'steel_id' => 'required|integer',
             'quantity' => 'required|numeric',
             'measure_units' => 'required|string',
         ],
-        [
-            'metal.required' => 'Заполните поле!',
-            'title.required' => 'Заполните поле!',
-            'standard.required' => 'Заполните поле!',
-            'steel.required' => 'Заполните поле!',
-            'quantity.required' => 'Заполните поле!',
-            'measure_units.required' => 'Заполните поле!',
-        ]);
+            [
+                'metal_id.required' => 'Заполните поле!',
+                'standard_id.required' => 'Заполните поле!',
+                'steel_id.required' => 'Заполните поле!',
+                'quantity.required' => 'Заполните поле!',
+                'measure_units.required' => 'Заполните поле!',
+            ]);
 
-        $metal = Metal::query()->where('title',$data['metal'])->get();
-        $data['metal_id'] = $metal[0]->id;
-        $characteristics = Characteristic::query()->where('metal_id', $data['metal_id'])->get();
-        $data['characteristic_id'] = $characteristics->where('title', $data['title'])->pluck('id')->first();
-        if ($data['sheetHeight'] && $data['sheetWidth']) {
-            $thickness = $data['title'];
-            $data['title'] = $data['title'] . 'X' . $data['sheetHeight'] . 'X' . $data['sheetWidth'];
-        }
+        $characteristics = Characteristic::query()->find($data['characteristic_id']);
 
-        if ($data['metal'] !== 'Лист') {
+        if ($data['metal_id'] !== 3) {
 
-            $tonLength = $characteristics->where('title', $data['title'])->first()->ton_length;
-            $tonArea = $characteristics->where('title', $data['title'])->first()->ton_area;
+            $tonLength = $characteristics->ton_length;
+            $tonArea = $characteristics->ton_area;
 
             if ($data['measure_units'] === 'т') {
                 $data['weight'] = $data['quantity'];
@@ -70,29 +63,17 @@ class StoreMaterialAction extends StoreUpdateAction
             $data['area'] = $data['weight'] * $tonArea;
 
         } else {
+            $tonArea = $characteristics->ton_area;
             if ($data['measure_units'] === 'т') {
-                $tonArea = $characteristics->where('title', $data['title'])->first()->ton_area;
                 $data['weight'] = $data['quantity'];
                 $data['area'] = $tonArea * $data['weight'];
             } elseif ($data['measure_units'] === 'шт.') {
-                $tonArea = $characteristics->where('title', $thickness)->first()->ton_area;
                 $data['area'] = 2 * ($data['sheetHeight'] / 1000) * ($data['sheetWidth'] / 1000) * $data['quantity'];
                 $data['weight'] = $data['area'] / $tonArea;
             }
         }
 
-        if ($data['metalLength']) {
-            $data['title'] = $data['title'] . ' L=' . $data['metalLength'];
-        }
-        $data['title'] = $data['metal'] . ' ' . $data['title'] . ' ' . $data['standard'] . ' ' . $data['steel'];
-
-        unset($data['metal'], $data['standard']);
-
-        if ($data['measure_units'] !== 'шт.') {
-            unset($data['quantity']);
-        }
-
-        unset($data['measure_units'], $data['steel'], $data['sheetHeight'], $data['sheetWidth'], $data['metalLength']);
+        unset($data['measure_units'], $data['sheetHeight'], $data['sheetWidth'], $data['metalLength'], $data['quantity']);
 
         return $data;
     }

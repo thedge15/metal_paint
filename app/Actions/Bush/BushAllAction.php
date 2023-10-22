@@ -5,6 +5,7 @@ namespace App\Actions\Bush;
 use App\Http\Resources\Bush\BushResource;
 use App\Http\Resources\Material\MaterialResource;
 use App\Http\Resources\Paint\PaintResource;
+use App\Models\Metal;
 use App\Models\Paint;
 
 class BushAllAction
@@ -15,7 +16,7 @@ class BushAllAction
     public function handle($bush): array
     {
         $projects = $bush->projects;
-        $materials = [];
+        $materials = collect([]);
 
         foreach ($projects as $project) {
             foreach ($project->materials as $item) {
@@ -23,13 +24,19 @@ class BushAllAction
             }
         }
 
-        $materialsFilter = collect($materials)->pluck('title')->unique()->sortBy('title');
+        $materialsFilter = collect($materials)->pluck('characteristic');
 
-        $materialsFilterCollection = [];
+//        dd($materialsFilter);
+
+        $materialsFilterCollection = collect([]);
 
         foreach ($materialsFilter as $item) {
-            $materialsFilterCollection[] = $item;
+            $materialsFilterCollection[] = [Metal::query()->find($item['metal_id'])->title, $item['title']];
         }
+
+        $materialsFilterCollection = $materialsFilterCollection->unique()->sort();
+
+//        dd($materialsFilterCollection);
 
         $elementsFilter = collect($materials)->pluck('element')->unique()->sort();
 
@@ -49,6 +56,6 @@ class BushAllAction
         ]);
 
         $bush = BushResource::make($bush)->resolve();
-        return compact(['materials', 'bush', 'paints', 'colors', 'materialsFilterCollection', 'elementsFilterCollection']);
+        return compact(['materials', 'bush', 'paints', 'colors', 'projects', 'materialsFilterCollection', 'elementsFilterCollection']);
     }
 }

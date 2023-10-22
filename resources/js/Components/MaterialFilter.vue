@@ -52,9 +52,7 @@ const closeMaterialFilter = () => {
                 <select v-model="selectedMaterial" class="bg-gray-50 border border-gray-600
                             text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
                             block w-48 h-8 text-xs">
-                    <option selected>{{ selectedMaterial }}</option>
-                    <option v-if="selectedMaterial !== 'Материал'">Материал</option>
-                    <option v-for="material in props.filterCollection">{{ material }}</option>
+                    <option v-for="material in props.filterCollection">{{ material[0]}} {{ material[1] }}</option>
                 </select>
             </div>
 

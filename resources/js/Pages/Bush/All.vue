@@ -1,7 +1,7 @@
 <script setup>
 
 import UserLayout from "@/Layouts/UserLayout.vue";
-import {Link, useForm} from "@inertiajs/vue3";
+import {Link} from "@inertiajs/vue3";
 import {computed, ref} from "vue";
 import PaintFilter from "@/Components/PaintFilter.vue";
 import ExportButton from "@/Components/ExportButton.vue";
@@ -14,14 +14,20 @@ const hideUpdate = ref(true);
 const selectedPaint = ref("Краска");
 const selectedColor = ref("Цвет");
 const selectedMaterial = ref("Наименование");
-const selectedElement = ref("Конструктивный элемент");
+const selectedElement = ref('Конструктивный элемент');
 
 const updId = ref();
 
 const updTitle = ref();
 
 const props = defineProps({
-    bush: Object,
+    bush: {
+        type: Object
+    },
+    projects: {
+        type: Array,
+        default: () => ({}),
+    },
     materials: {
         type: Array,
         default: () => ({}),
@@ -80,21 +86,26 @@ const selectedMaterialPaint = computed(() => {
 
 const selectedPaintArray = computed(() => {
 
+
+
     let filterArray = selectedMaterial.value === 'Наименование' ? props.materials :
-        props.materials.filter(item => item.title === selectedMaterial.value);
+        props.materials.filter(item => item.metal.title + ' ' + item.characteristic.title === selectedMaterial.value);
+
+    let selectedElementTitle = selectedElement.value === 'Конструктивный элемент' ? null : selectedElement.value;
 
     filterArray = selectedElement.value === 'Конструктивный элемент' ? filterArray :
-        filterArray.filter(item => item.element === selectedElement.value);
+        filterArray.filter(item => item.element.title === selectedElementTitle);
 
-    if (selectedPaint.value !== "Краска" && selectedColor.value === "Цвет") {
-        filterArray = filterArray.filter(item => item.paint === selectedPaint.value);
-    }
-    if (selectedPaint.value === "Краска" && selectedColor.value !== "Цвет") {
-        filterArray = filterArray.filter(item => item.paint_color === selectedColor.value);
-    }
-    if (selectedPaint.value !== "Краска" && selectedColor.value !== "Цвет") {
-        filterArray = filterArray.filter(item => item.paint === selectedPaint.value).filter(item => item.paint_color === selectedColor.value);
-    }
+    // if (selectedPaint.value !== "Краска" && selectedColor.value === "Цвет") {
+    //     filterArray = filterArray.filter(item => item.paint === selectedPaint.value);
+    // }
+    // if (selectedPaint.value === "Краска" && selectedColor.value !== "Цвет") {
+    //     filterArray = filterArray.filter(item => item.paint_color === selectedColor.value);
+    // }
+    // if (selectedPaint.value !== "Краска" && selectedColor.value !== "Цвет") {
+    //     filterArray = filterArray.filter(item => item.paint === selectedPaint.value).filter(item => item.paint_color === selectedColor.value);
+    // }
+
 
     return filterArray;
 })
@@ -122,6 +133,8 @@ const selectAll = computed({
                 {{ bush.title }}
             </Link>
         </div>
+        {{ selectedMaterial }}
+<!--        {{ materials }}-->
         <div class="flex justify-between">
             <ExportButton :export-route="'export.bush'" :export-element="bush"></ExportButton>
         </div>
@@ -132,13 +145,15 @@ const selectAll = computed({
                 <tr>
                     <th class="w-6"><input type="checkbox" v-model="selectAll"></th>
                     <th class="w-16">№ РФ</th>
+                    <th class="w-48">РД</th>
                     <th class="w-64">
-                        <ElementFilter :filter-collection="elementsFilterCollection" :column-name="'Конструктивный элемент'"
-                                        @filterElement="filterElement"></ElementFilter>
+                        <ElementFilter :filter-collection="elementsFilterCollection"
+                                       :column-name="'Конструктивный элемент'"
+                                       @filterElement="filterElement"></ElementFilter>
                     </th>
                     <th>
                         <MaterialFilter :filter-collection="materialsFilterCollection" :column-name="'Наименование'"
-                        @filterMaterial="filterMaterial"></MaterialFilter>
+                                        @filterMaterial="filterMaterial"></MaterialFilter>
                     </th>
                     <th class="w-28">Количество, т</th>
                     <th class="w-128">
@@ -156,11 +171,15 @@ const selectAll = computed({
                     <td :class='["px-2 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         {{ item['numb'] }}
                     </td>
+                    <td :class='["px-2 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
+                        {{ item['project']['title'] }}
+                    </td>
                     <td :class='["px-3 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
-                        {{ item.element }}
+                        {{ item.element.title }}
                     </td>
                     <td :class='["px-6 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
-                        {{ item.title }} {{ item.standard }} {{ item.steel }}
+                        {{ item.metal.title }} {{ item.characteristic.title }} {{ item.standard.title }}
+                        {{ item.steel.title }}
                     </td>
                     <td :class='["px-2 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         {{ item.weight }} <span v-if="item.quantity"> ({{ item.quantity }} шт.)</span>
@@ -180,9 +199,10 @@ const selectAll = computed({
                 <tr class="relative sticky bottom-0">
                     <td class="text-center text-indigo-100 bg-indigo-500"></td>
                     <td class="text-center text-indigo-100 bg-indigo-500"></td>
+                    <td class="text-center text-indigo-100 bg-indigo-500"></td>
+                    <td class="text-center text-indigo-100 bg-indigo-500"></td>
                     <td class="text-indigo-100 bg-indigo-500">ИТОГО</td>
                     <td class="text-center text-indigo-100 bg-indigo-500">{{ selectedMaterialWeight.toFixed(2) }}т</td>
-                    <td class="text-center text-indigo-100 bg-indigo-500"></td>
                     <td class="text-center text-indigo-100 bg-indigo-500">{{ selectedMaterialPaint.toFixed(2) }}кг</td>
                 </tr>
             </table>

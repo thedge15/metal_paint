@@ -17,13 +17,14 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('project_id')->index()->constrained('projects');
+            $table->foreignId('metal_id')->index()->constrained('metals');
             $table->foreignId('characteristic_id')->index()->constrained('characteristics');
+            $table->foreignId('standard_id')->index()->constrained('standards');
+            $table->foreignId('steel_id')->index()->constrained('steels');
+            $table->foreignId('element_id')->index()->constrained('elements');
 
-            $table->smallInteger('metal_id');
 
             $table->integer('numb')->nullable();
-            $table->string('element')->nullable();
-            $table->string('title');
             $table->decimal('weight', 13, 3);
             $table->decimal('length', 13, 3)->nullable();
             $table->decimal('area', 13, 3);

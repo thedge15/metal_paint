@@ -21,7 +21,7 @@ class CharacteristicResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'metal' => new MetalResource($this->metal),
+            'metal_id' => $this->metal_id,
             'title' => $this->title,
             'ton_length' => $this->ton_length,
             'ton_area' => $this->ton_area,

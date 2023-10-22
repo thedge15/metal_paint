@@ -19,7 +19,11 @@ const updProduct = ref();
 const updId = ref();
 const updNumb = ref();
 const updElement = ref();
+const updMetal = ref();
+const updCharacteristic = ref();
 const updTitle = ref();
+const updStandard = ref();
+const updSteel = ref();
 const updWeight = ref();
 const updArea = ref();
 const updPaint = ref();
@@ -84,7 +88,11 @@ const showUpdate = (item) => {
     form.id = item.id
     form.numb = item.numb
     form.element = item.element
+    form.metal = item.metal
+    form.characteristic = item.characteristic
     form.title = item.title
+    form.standard = item.standard
+    form.steel = item.steel
     form.weight = item.weight
     form.area = item.area
     form.paint = item.paint
@@ -96,8 +104,11 @@ const showUpdate = (item) => {
 const form = useForm({
     id: updId.value,
     numb: updNumb.value,
-    element: updElement.value,
-    title: updTitle.value,
+    element_id: '',
+    metal_id: '',
+    characteristic_id: '',
+    standard: '',
+    steel: '',
     weight: updWeight.value,
     area: updArea.value,
     paint: updPaint.value,
@@ -122,6 +133,18 @@ const closeUpdate = () => {
     updId.value = ''
     form.clearErrors()
 }
+
+const selectedStandards = computed(() => {
+    if (form.metal_id) {
+        return props.standards.filter(item => item.metal_id === form.metal_id)
+    }
+})
+
+const selectedCharacteristics = computed(() => {
+    if (form.metal_id) {
+        return props.characteristics.filter(item => item.metal_id === form.metal_id)
+    }
+})
 
 const allSelectedMaterials = computed(() => {
     return props.materials.filter(material => checkedMaterials.value.includes(material.id));
@@ -183,6 +206,7 @@ const selectAll = computed({
             <CreateButton @closeStore="closeStore" :disabled="hideMaterial"></CreateButton>
             <ExportButton :export-route="'export.project'" :export-element="project"></ExportButton>
         </div>
+        Эдемент{{ form.element_id}} Метал{{form.metal_id }} Хар-ка {{ form.characteristic_id }} ГОСТ{{ form.standard_id }} Сталь {{ form.steel_id }}
         <!-- component -->
         <div class="flex-grow overflow-auto">
             <table class="relative w-full border mb-3 text-xs table-fixed">
@@ -220,24 +244,44 @@ const selectAll = computed({
                     </td>
                     <td :class='["px-3 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <div v-if="hideUpdate || !hideUpdate && item.id !== updId">
-                            {{ item.element }}
+                            {{ item.element.title }}
                         </div>
                         <div v-if="!hideUpdate && item.id === updId" class="ml-10">
-                            <select v-model="form.element" id="updPosition" class="bg-gray-50 border border-gray-600
+                            <select v-model="form.element_id" id="updPosition" class="bg-gray-50 border border-gray-600
                             text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500
                             focus:border-blue-500 block w-44 h-8 text-xs">
-                                <option v-for="element in elements">{{ element.title }}</option>
+                                <option v-for="element in elements" :value="element.id">{{ element.title }}</option>
                             </select>
                         </div>
                     </td>
                     <td :class='["px-6 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <div v-if="hideUpdate || !hideUpdate && item.id !== updId">
-                            {{ item.title }} {{item.standard}} {{item.steel}}
+                            {{ item.metal.title }} {{ item.characteristic.title }} {{ item.standard.title }}
+                            {{ item.steel.title }}
                         </div>
-                        <div v-if="!hideUpdate && item.id === updId">
-                            <input v-model="form.title" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
+                        <div v-if="!hideUpdate && item.id === updId" class="flex">
+                            <select v-model="form.metal_id" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
                             text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
                             w-full block text-xs">
+<!--                                <option selected>{{ item.metal.title }}</option>>-->
+                                <option v-for="metal in metals" :value="metal.id">{{ metal.title }}</option>
+                            </select>
+                            <select v-model="form.characteristic_id" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
+                            text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
+                            w-full block text-xs">
+                                <option v-for="characteristic in selectedCharacteristics">{{ characteristic.title }}</option>
+                            </select>
+                            <select v-model="form.standard_id" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
+                            text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
+                            w-full block text-xs">
+                                <option v-for="standard in selectedStandards">{{ standard.title }}</option>
+                            </select>
+                            <select v-model="form.steel_id" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
+                            text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
+                            w-full block text-xs">
+                                <option v-for="steel in steels">{{ steel.title }}</option>
+                            </select>
+
                         </div>
                     </td>
                     <td :class='["px-2 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>

@@ -61,7 +61,7 @@ const closeUpdate = () => {
                 </thead>
                 <tbody class="divide-y bg-gray-100">
                 <tr v-for="(item, index) in elements">
-                    <td :class='["px-6 py-1 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>{{ index + 1 }}</td>
+                    <td :class='["px-6 py-1 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>{{ item.id }}</td>
                     <td :class='["px-6 py-1 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <div v-if="hideUpdate || !hideUpdate && item.id !== updId">
                             {{ item.title }}

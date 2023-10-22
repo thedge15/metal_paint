@@ -35,23 +35,25 @@ const props = defineProps({
 const emit = defineEmits(['closeStore'])
 
 const metalCharacteristics = computed(() => {
-    return props.characteristics.filter(item => item.metal.data.title === form.metal);
+    return props.characteristics.filter(item => item.metal_id === form.metal_id);
 })
 
 const selectedStandards = computed(() => {
-    return props.standards.filter(item => item.metal === form.metal)
+    return props.standards.filter(item => item.metal_id === form.metal_id)
 })
+
+
 
 const form = useForm({
     project_id: props.project_id,
-    metal: '',
-    element: '',
-    title: '',
+    metal_id: '',
+    element_id: '',
+    characteristic_id: '',
     sheetHeight: '',
     sheetWidth: '',
     metalLength: '',
-    standard: '',
-    steel: '',
+    standard_id: '',
+    steel_id: '',
     quantity: '',
     measure_units: '',
 })
@@ -61,20 +63,25 @@ const submit = () => {
             if (JSON.stringify(form.errors) === '{}') {
                 closeStore();
             } else {
-                console.log('Validation error');
+                console.log(form.errors);
             }
         }, (1000)
     )
 }
+
+const showResult = () => {
+    console.log(form.metal_id);
+};
+
 const closeStore = () => {
-    form.metal = ''
-    form.element = ''
-    form.title = ''
+    form.metal_id = ''
+    form.element_id = ''
+    form.characteristic_id = ''
     form.sheetHeight = ''
     form.sheetWidth = ''
     form.metalLength = ''
-    form.standard = ''
-    form.steel = ''
+    form.standard_id = ''
+    form.steel_id = ''
     form.quantity = ''
     form.measure_units = ''
     form.clearErrors()
@@ -84,42 +91,43 @@ const closeStore = () => {
 
 <template>
     <div :class="['shadow-md sm:rounded-lg', hideMaterial ? '' : 'hidden']">
+        <p @click.prevent="showResult">Жмякай</p>
         <form @submit.prevent="submit" class="p-2 bg-gray-200">
             <div class="grid grid-cols-5 w-full">
                 <div>
                     <label for="metal">Выберите конструктивный элемент</label>
-                    <select v-model="form.element" id="element" class="border border-gray-300
+                    <select v-model="form.element_id" id="element" class="border border-gray-300
                     focus:ring-blue-500 focus:border-blue-500 h-9">
-                        <option v-for="item in elements">{{ item.title }}</option>
+                        <option v-for="item in elements" :value="item.id">{{ item.title }}</option>
                     </select>
                 </div>
                 <div class="ml-2">
                     <label for="metal">Выберите металлопрокат</label>
-                    <select v-model="form.metal" id="metal" class="border border-gray-300
+                    <select v-model="form.metal_id" id="metal" class="border border-gray-300
                     focus:ring-blue-500 focus:border-blue-500 h-9">
-                        <option v-for="item in metals">{{ item.title }}</option>
+                        <option v-for="item in metals" :value="item.id">{{ item.title }}</option>
                     </select>
                 </div>
-                <div v-if="form.metal" class="ml-2">
+                <div v-if="form.metal_id" class="ml-2">
                     <label for="characteristic">Выберите размеры</label>
-                    <select v-model="form.title" id="characteristic" class="border border-gray-300 focus:ring-blue-500
+                    <select v-model="form.characteristic_id" id="characteristic" class="border border-gray-300 focus:ring-blue-500
                         focus:border-blue-500 h-9">
-                        <option v-for="item in metalCharacteristics">{{ item.title }}</option>
+                        <option v-for="item in metalCharacteristics" :value="item.id">{{ item.title }}</option>
                     </select>
-                    <InputError :message="form.errors.title"></InputError>
+                    <InputError :message="form.errors.characteristic_id"></InputError>
                 </div>
-                <div v-if="form.metal && form.metal === 'Лист'" class="ml-2">
+                <div v-if="form.metal_id && form.metal_id === 3" class="ml-2">
                     <label for="sheetHeight">Введите ширину листа, мм</label>
                     <input v-model="form.sheetHeight" id="sheetHeight" type="number" class="border
                     border-gray-300 focus:ring-blue-500 focus:border-blue-500  h-9">
                 </div>
-                <div v-if="form.metal && form.metal === 'Лист'" class="ml-2">
+                <div v-if="form.metal_id && form.metal_id === 3" class="ml-2">
                     <label for="sheetWidth">Введите высоту листа, мм</label>
                     <input v-model="form.sheetWidth" id="sheetWidth" type="number" class="border
                     border-gray-300 focus:ring-blue-500 focus:border-blue-500 h-9">
                 </div>
                 <div
-                    v-if="form.metal === 'Труба' || form.metal === 'Швеллер' || form.metal === 'Уголок' || form.metal === 'Двутавр'"
+                    v-if="form.metal_id === 4 || form.metal_id === 2 || form.metal === 'Уголок' || form.metal === 'Двутавр'"
                     class="ml-2">
                     <label for="metalLength">Введите длину, мм (при наличии)</label>
                     <input v-model="form.metalLength" id="metalLength" type="number" class="border
@@ -128,20 +136,20 @@ const closeStore = () => {
             </div>
             <div class="grid grid-cols-5 w-full">
                 <div>
-                    <label for="standard">Выберите ГОСТ</label>
-                    <select v-model="form.standard" id="standard" class="mb-2 border border-gray-300 focus:ring-blue-500
+                    <label for="standard_id">Выберите ГОСТ</label>
+                    <select v-model="form.standard_id" id="standard_id" class="mb-2 border border-gray-300 focus:ring-blue-500
                         focus:border-blue-500 h-9">
-                        <option v-for="item in selectedStandards">{{ item.title }}</option>
+                        <option v-for="item in selectedStandards" :value="item.id">{{ item.title }}</option>
                     </select>
-                    <InputError :message="form.errors.standard"></InputError>
+                    <InputError :message="form.errors.standard_id"></InputError>
                 </div>
                 <div class="ml-2">
-                    <label for="steel">Выберите сталь</label>
-                    <select v-model="form.steel" id="steel" class="border border-gray-300
+                    <label for="steel_id">Выберите сталь</label>
+                    <select v-model="form.steel_id" id="steel" class="border border-gray-300
                     focus:ring-blue-500 focus:border-blue-500 h-9">
-                        <option v-for="item in steels">{{ item.title }} {{ item.steel_standard }}</option>
+                        <option v-for="item in steels" :value="item.id">{{ item.title }} {{ item.steel_standard }}</option>
                     </select>
-                    <InputError :message="form.errors.steel"></InputError>
+                    <InputError :message="form.errors.steel_id"></InputError>
                 </div>
                 <div class="ml-2">
                     <label for="quantity">Введите количество</label>
@@ -166,7 +174,7 @@ const closeStore = () => {
                     <InputError :message="form.errors.measure_units"></InputError>
                 </div>
             </div>
-            <button type="submit" :disabled="!form.metal"
+            <button type="submit" :disabled="!form.metal_id"
                     class="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br
                 focus:ring-4 focus:outline-none focus:ring-lime-300 font-medium text-sm px-5 py-2.5 text-center mr-2">
                 Создать

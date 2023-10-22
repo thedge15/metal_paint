@@ -14,25 +14,22 @@
         </div>
         <div v-if="showFilter" class="flex justify-center">
             <div class="py-2">
-                <select v-model="selectedPaint" class="bg-gray-50 border border-gray-600
-                            text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
-                            block w-48 h-8 text-xs">
+                <select v-model="selectedPaint" class="bg-gray-50 border border-gray-600 text-gray-900 text-sm italic
+                    text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-8 text-xs">
                     <option selected>{{ selectedPaint }}</option>
                     <option v-if="selectedPaint !== 'Краска'">Краска</option>
                     <option v-for="paint in paints">{{ paint.title }}</option>
                 </select>
             </div>
             <div class="py-2">
-                <select v-model="selectedColor" class="bg-gray-50 border border-gray-600
-                            text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
-                            block w-32 h-8 text-xs">
+                <select v-model="selectedColor" class="bg-gray-50 border border-gray-600 text-gray-900 text-sm italic
+                    text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 h-8 text-xs">
                     <option selected>{{ selectedColor }}</option>
                     <option v-if="selectedColor !== 'Цвет'">Цвет</option>
                     <option :class="[value]" v-for="(value, color) in colors">{{ color }}</option>
                 </select>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                 @click.prevent="closePaintFilter"
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" @click.prevent="closePaintFilter"
                  stroke-width="1.5"
                  stroke="currentColor" class="w-6 ml-3 h-8 cursor-pointer pt-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
