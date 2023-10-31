@@ -10,6 +10,8 @@ import DeleteButton from "@/Components/DeleteButton.vue";
 import PaintFilter from "@/Components/PaintFilter.vue";
 import ExportButton from "@/Components/ExportButton.vue";
 
+
+
 const checkedMaterials = ref([]);
 const hideMaterial = ref(false);
 const hideUpdate = ref(true);
@@ -85,15 +87,13 @@ const showUpdate = (item) => {
     hideUpdate.value = !hideUpdate.value
     updProduct.value = item
     updId.value = item.id
-    form.id = item.id
-    form.numb = item.numb
     form.element = item.element
+    form.weight = item.weight
     form.metal = item.metal
     form.characteristic = item.characteristic
     form.title = item.title
     form.standard = item.standard
     form.steel = item.steel
-    form.weight = item.weight
     form.area = item.area
     form.paint = item.paint
     form.paint_color = item.paint_color
@@ -103,13 +103,13 @@ const showUpdate = (item) => {
 
 const form = useForm({
     id: updId.value,
-    numb: updNumb.value,
+    numb: '',
     element_id: '',
     metal_id: '',
     characteristic_id: '',
     standard: '',
     steel: '',
-    weight: updWeight.value,
+    weight: '',
     area: updArea.value,
     paint: updPaint.value,
     paint_color: updPaintColor.value,
@@ -202,11 +202,12 @@ const selectAll = computed({
                 {{ project.title }}
             </Link>
         </div>
+        ssss{{ form.metal }}
         <div class="flex justify-between">
             <CreateButton @closeStore="closeStore" :disabled="hideMaterial"></CreateButton>
             <ExportButton :export-route="'export.project'" :export-element="project"></ExportButton>
         </div>
-        Эдемент{{ form.element_id}} Метал{{form.metal_id }} Хар-ка {{ form.characteristic_id }} ГОСТ{{ form.standard_id }} Сталь {{ form.steel_id }}
+<!--        Эдемент{{ form.element_id}} Метал{{form.metal_id }} Хар-ка {{ form.characteristic_id }} ГОСТ{{ form.standard_id }} Сталь {{ form.steel_id }}-->
         <!-- component -->
         <div class="flex-grow overflow-auto">
             <table class="relative w-full border mb-3 text-xs table-fixed">
@@ -233,7 +234,7 @@ const selectAll = computed({
                     </td>
                     <td :class='["px-2 py-1.5 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <div v-if="hideUpdate || !hideUpdate && item.id !== updId">
-                            {{ item['numb'] }}
+                            {{ item.numb }}
                         </div>
                         <div v-if="!hideUpdate && item.id === updId">
                             <input v-model="form.numb" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
@@ -260,11 +261,11 @@ const selectAll = computed({
                             {{ item.steel.title }}
                         </div>
                         <div v-if="!hideUpdate && item.id === updId" class="flex">
-                            <select v-model="form.metal_id" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
+                            <select :key="form.metal_id" v-model="form.metal.title" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
                             text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
                             w-full block text-xs">
 <!--                                <option selected>{{ item.metal.title }}</option>>-->
-                                <option v-for="metal in metals" :value="metal.id">{{ metal.title }}</option>
+                                <option v-for="metal in metals" key="{{ metal.id }}">{{ metal.title }}</option>
                             </select>
                             <select v-model="form.characteristic_id" id="updPosition" class="h-8 bg-gray-50 border border-gray-600
                             text-gray-900 text-sm italic text-center rounded-lg focus:ring-blue-500 focus:border-blue-500
@@ -369,9 +370,9 @@ const selectAll = computed({
             :metals="metals" :characteristics="characteristics" :standards="standards" :steels="steels"
             :units="units" @closeStore="closeStore">
         </MaterialStoreComponent>
-        <Link :href="route('all')">
-            Набивка материала
-        </Link>
+<!--        <Link :href="route('all')">-->
+<!--            Набивка материала-->
+<!--        </Link>-->
     </UserLayout>
 </template>
 

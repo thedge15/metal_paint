@@ -3,10 +3,20 @@
 namespace App\Actions\Bush;
 
 use App\Http\Resources\Bush\BushResource;
+use App\Http\Resources\Characteristic\CharacteristicResource;
+use App\Http\Resources\Element\ElementResource;
 use App\Http\Resources\Material\MaterialResource;
+use App\Http\Resources\Metal\MetalResource;
 use App\Http\Resources\Paint\PaintResource;
+use App\Http\Resources\Project\ProjectResource;
+use App\Http\Resources\Standard\StandardResource;
+use App\Http\Resources\Steel\SteelResource;
+use App\Models\Characteristic;
+use App\Models\Element;
 use App\Models\Metal;
 use App\Models\Paint;
+use App\Models\Standard;
+use App\Models\Steel;
 
 class BushAllAction
 {
@@ -16,6 +26,8 @@ class BushAllAction
     public function handle($bush): array
     {
         $projects = $bush->projects;
+        $projectsFilterCollection = collect($projects)->pluck('title');
+
         $materials = collect([]);
 
         foreach ($projects as $project) {
@@ -25,9 +37,6 @@ class BushAllAction
         }
 
         $materialsFilter = collect($materials)->pluck('characteristic');
-
-//        dd($materialsFilter);
-
         $materialsFilterCollection = collect([]);
 
         foreach ($materialsFilter as $item) {
@@ -41,7 +50,6 @@ class BushAllAction
         $elementsFilter = collect($materials)->pluck('element')->unique()->sort();
 
         $elementsFilterCollection = [];
-
         foreach ($elementsFilter as $item) {
             $elementsFilterCollection[] = $item;
         }
@@ -55,7 +63,19 @@ class BushAllAction
             'RAL 8002' => 'bg-amber-800',
         ]);
 
+//        dd($projects);
+
+        $elements = ElementResource::collection(Element::all()->sortBy('title'))->resolve();
+        $metals = MetalResource::collection(Metal::all()->sortBy('title'))->resolve();
+        $characteristics = CharacteristicResource::collection(Characteristic::all()->sortBy('title', SORT_NATURAL))->resolve();
+        $standards = StandardResource::collection(Standard::all()->sortBy('title'))->resolve();
+        $steels = SteelResource::collection(Steel::all()->sortBy('title'))->resolve();
+        $units = ['т', 'м', 'шт.', 'м2'];
+        $projects=ProjectResource::collection($projects->sortBy('title'))->resolve();
+
         $bush = BushResource::make($bush)->resolve();
-        return compact(['materials', 'bush', 'paints', 'colors', 'projects', 'materialsFilterCollection', 'elementsFilterCollection']);
+        return compact(['materials', 'metals', 'characteristics', 'bush', 'elements', 'paints', 'colors',
+            'projects', 'units', 'standards', 'steels', 'materialsFilterCollection', 'elementsFilterCollection',
+            'projectsFilterCollection']);
     }
 }

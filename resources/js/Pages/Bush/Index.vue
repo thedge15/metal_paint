@@ -39,8 +39,8 @@ const form = useForm({
                 <tr>
                     <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">№</th>
                     <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Наименование куста</th>
-                    <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Просмотр</th>
-                    <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Весь куст</th>
+                    <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Разделы</th>
+                    <th class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Материапы</th>
                     <th v-if="$page.props.auth.user['is_admin'] === 1"
                         class="sticky top-0 px-6 py-3 text-indigo-100 bg-indigo-500">Удаление
                     </th>
@@ -52,11 +52,13 @@ const form = useForm({
                     <td :class='["px-6 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>{{ item.title }}</td>
                     <td :class='["px-6 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
                         <Link :href="route('show.bush', item.id)">
-                            <ShowButton></ShowButton>
+                            <ShowButton />
                         </Link>
                     </td>
                     <td :class='["px-6 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>
-                        <a :href="route('all.bush', item.id)">Материалы</a>
+                        <Link :href="route('all.bush', item.id)">
+                            <ShowButton />
+                        </Link>
                     </td>
                     <td v-if="$page.props.auth.user['is_admin'] === 1"
                         :class='["px-6 py-2 text-center", index%2 === 0 ? "" : "bg-gray-300"]'>

@@ -9,6 +9,7 @@ use App\Actions\ShowAllAction;
 use App\Exports\MaterialsExport;
 use App\Models\Material;
 use App\Models\Project;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,13 +28,15 @@ class MaterialController extends Controller
     {
         return inertia('Material/Index', $action->handle($project));
     }
+
     /**
      * @param StoreMaterialAction $action
-     * @return void
+     * @return RedirectResponse
      */
-    public function store(StoreMaterialAction $action): void
+    public function store(StoreMaterialAction $action): RedirectResponse
     {
         Material::query()->create($action->handle());
+        return redirect()->back();
     }
     /**
      * @param UpdateMaterialAction $action
